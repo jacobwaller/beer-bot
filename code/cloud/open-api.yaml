@@ -1,0 +1,131 @@
+swagger: "2.0"
+info:
+  title: Beer Bot API
+  description: The API specification for The Beer Delivery Robot
+  version: 0.0.1
+
+basePath: /
+schemes:
+  - http
+paths:
+  /get-delivery/{index}:
+    get: 
+      operationId: getDelivery
+      summary: returns the delivery at index, starting from the oldest entry in the queue
+      parameters:
+        - in: path
+          name: index
+          required: true
+          type: integer
+          minimum: 0
+          
+      produces: 
+        - application/json
+      responses:
+        200: 
+          description: A delivery object
+          schema:
+            type: object
+            properties:
+              id: 
+                type: string
+                example: c56f8800-68b0-4972-9b22-73510796e95a
+              x: 
+                type: integer
+              y:
+                type: integer
+              beerIndex:
+                type: integer
+        404:
+          description: There is no delivery for the provided index
+  /set-delivered/{id}:
+    post:
+      operationId: setDelivered
+      summary: Sets a delivery as delivered and removes it from the queue
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+      responses:
+        200:
+          description: entry was deleted properly
+        404:
+          description: entry did not exist
+  /create-delivery:
+    post:
+      operationId: createDelivery
+      summary: Creates a delivery object and adds it to the queue
+      parameters:
+        - in: body
+          name: delivery
+          schema:
+            type: object
+            properties:
+              x: 
+                type: integer
+              y:
+                type: integer
+              beerIndex:
+                type: integer
+                
+      responses:
+        200:
+          description: delivery was created properly
+        500:
+          description: internal error
+  
+  /get-options:
+    get: 
+      operationId: getOptions
+      summary: returns the beer options
+      produces: 
+        - application/json
+      responses:
+        200: 
+          description: A delivery object
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Hopewell Clover Club (Sour)
+                abv: 
+                  type: number
+                  example: 0.06
+                remaining:
+                  type: integer
+                  example: 6
+              
+        500:
+          description: There are no options
+          
+  /set-options:
+    post: 
+      operationId: setOptions
+      summary: returns the beer options
+      parameters:
+        - in: body
+          name: options
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Hopewell Clover Club (Sour)
+                abv: 
+                  type: number
+                  example: 0.06
+                remaining:
+                  type: integer
+                  example: 6
+      responses:
+        200: 
+          description: Updated options properly
+        500:
+          description: Internal error
+
