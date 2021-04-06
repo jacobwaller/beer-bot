@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prebuild": "rm -rf ./built",
     "build": "tsc --build",
+    "postbuild": "cp package.json ./built/src/package.json",
+    "deploy:delivery": "gcloud functions deploy delivery --allow-unauthenticated --trigger-http --entry-point=delivery_handler --region='us-central1' --runtime=nodejs14 --source='./built/src'",
+    "deploy:option": "gcloud functions deploy option --allow-unauthenticated --trigger-http --entry-point=option_handler --region='us-central1' --runtime=nodejs14 --source='./built/src'",
+    "predeploy": "npm run build",
+    "deploy": "npm run deploy:delivery && npm run deploy:option",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
