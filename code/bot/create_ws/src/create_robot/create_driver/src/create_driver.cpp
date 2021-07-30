@@ -260,6 +260,7 @@ void CreateDriver::undockCallback(std_msgs::msg::Empty::UniquePtr msg)
   (void) msg;
 
   // Switch robot back to FULL mode
+  // TODO: Have this set to full, back up, then go to safe mode
   robot_->setMode(create::MODE_FULL);
 }
 
