@@ -16,11 +16,19 @@
 	<!-- End Create -->
 		
 	<!-- Sets up nodes for SLAM Toolbox -->
+
+	<!-- For full SLAM Suite -->
 	<include file="/home/jacob/beer-bot/code/bot/mapping-bringup/launch/slam_launch.py" />
+
+	<!-- For just localization -->
+	<!-- <include file="/home/jacob/beer-bot/code/bot/mapping-bringup/launch/localization_launch.py" /> -->
+
 	<!-- End SLAM Toolbox -->
 
 	<!-- Sets up nodes for Nav2 -->
 	<include file="/home/jacob/beer-bot/code/bot/mapping-bringup/launch/nav_launch.py" />
 	<!-- End Nav2 -->
+
+	<!-- <node name="controller" pkg="controller" exec="controller_node" output="screen" /> -->
 
 </launch>
