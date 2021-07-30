@@ -1,0 +1,5 @@
+screen -S create -X at "#" stuff $'\003'
+screen -S slam -X at "#" stuff $'\003'
+screen -S nav2 -X at "#" stuff $'\003'
+screen -S rplidar -X at "#" stuff $'\003'
+screen -S transforms -X at "#" stuff $'\003'

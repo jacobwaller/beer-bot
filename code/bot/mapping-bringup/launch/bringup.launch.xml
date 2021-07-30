@@ -1,0 +1,17 @@
+<launch>
+	<!-- <executable cmd="ls -las" launch-prefix="time" output="screen"/> -->
+
+	<executable cmd="source /home/jacob/beer_bot/create_ws/install/setup.sh" output="screen"/>
+	<include file="/home/jacob/beer_bot/create_ws/src/create_robot/create_bringup/launch/create_2.launch"/>
+	
+		
+	<include file="/home/jacob/beer_bot/transforms/launch/tf_setup_launch.py"/>
+	<include file="/home/jacob/beer_bot/rplidar_ros/launch/rplidar.launch.py"/>
+	
+
+	<!-- /opt/ros/foxy/share/nav2_bringup/launch/ -->
+	<!-- <include file="$(find-pkg-share slam_toolbox)/launch/online_async_launch.py"/> -->
+	<!-- <include file="$(find-pkg-share nav2_bringup)/launch/navigation_launch.py"/> -->
+
+
+</launch>
