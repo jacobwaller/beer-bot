@@ -8,6 +8,8 @@ Contains:
   * [create_robot](https://github.com/AutonomyLab/create_robot) ROS2 Package for controlling the iRobot Create
   * [libcreate](https://github.com/AutonomyLab/libcreate) C++ Library to use iRobot Create
 
-## rplidar_ros/
+## rplidar_ws/
 
-Modified to use 
+Modified to use `/dev/ttyLDR` in `rplidar.launch.py`
+___
+This is not the cleanest way to manage these things, but it worked as a quick and dirty solution
