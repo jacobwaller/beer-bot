@@ -1,0 +1,27 @@
+<launch>
+	<arg name="create_config_file" default="/home/jacob/beer-bot/code/bot/mapping-bringup/config/create_config.yaml" />
+  <arg name="create_publish_desc" default="true" />
+
+
+	<!-- Launches the Transform and the RPLidar nodes-->
+	<include file="/home/jacob/beer-bot/code/bot/mapping-bringup/launch/tf_rplidar_launch.py"/>
+	<!-- End TF & RPLidar -->
+
+	<!-- Sets up nodes for the iRobot Create -->
+  <node name="create_driver" pkg="create_driver" exec="create_driver" output="screen">
+    <param from="$(var create_config_file)" />
+    <param name="robot_model" value="CREATE_2" />
+  </node>
+  <include if="$(var create_publish_desc)" file="$(find-pkg-share create_description)/launch/create_2.launch" />
+	<!-- End Create -->
+		
+	<!-- Sets up nodes for SLAM Toolbox -->
+	<include file="/home/jacob/beer-bot/code/bot/mapping-bringup/launch/slam_offline_async_launch.py" />
+	<!-- End SLAM Toolbox -->
+
+	<!-- /opt/ros/foxy/share/nav2_bringup/launch/ -->
+	<!-- <include file="$(find-pkg-share slam_toolbox)/launch/online_async_launch.py"/> -->
+	<!-- <include file="$(find-pkg-share nav2_bringup)/launch/navigation_launch.py"/> -->
+
+
+</launch>
