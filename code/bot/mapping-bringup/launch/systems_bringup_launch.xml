@@ -16,7 +16,7 @@
 	<!-- End Create -->
 		
 	<!-- Sets up nodes for SLAM Toolbox -->
-	<include file="/home/jacob/beer-bot/code/bot/mapping-bringup/launch/slam_offline_async_launch.py" />
+	<include file="/home/jacob/beer-bot/code/bot/mapping-bringup/launch/slam_online_async_launch.py" />
 	<!-- End SLAM Toolbox -->
 
 	<!-- /opt/ros/foxy/share/nav2_bringup/launch/ -->
