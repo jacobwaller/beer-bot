@@ -1,9 +1,10 @@
 from typing import final
 import rclpy
+import time
 from rclpy.node import Node
 from rclpy.duration import Duration
 
-from robot_navigator import BasicNavigator, NavigationResult
+from controller.robot_navigator import BasicNavigator, NavigationResult
 
 # Msgs
 from std_msgs.msg import String
@@ -27,7 +28,6 @@ class ControllerNode(Node):
     ###
     def goto(self, coords):
         goal = PoseStamped()
-        goal.header.seq = 1
         goal.header.stamp.sec = 0
         goal.header.frame_id = "map"
 
@@ -63,17 +63,19 @@ class ControllerNode(Node):
         self.undock_publisher = self.create_publisher(Empty, 'undock', 2)
         self.dock_publisher = self.create_publisher(Empty, 'dock', 2)
         self.drive_publisher = self.create_publisher(Twist, "cmd_vel", 10)
-        self.waypoint_subscriber = self.create_subscription()
+        # self.waypoint_subscriber = self.create_subscription()
     
         self.map_loader_client = self.create_client(DeserializePoseGraph, 'slam_toolbox/deserialize_map')
 
         # Load the map with current location being the dock location
-        map_loader_data = DeserializePoseGraph()
-        map_loader_data.Request.filename = 'pozeywozey'
-        map_loader_data.Request.match_type = map_loader_data.Request.START_AT_FIRST_NODE
+        self.get_logger().info('loading map')
+        map_loader_data = DeserializePoseGraph.Request()
+        map_loader_data.filename = '/home/jacob/beer-bot/pozeywozey'
+        map_loader_data.match_type = 1
         
-        self.map_loader_client.call(map_loader_data)
-
+        future = self.map_loader_client.call_async(map_loader_data)
+        rclpy.spin_until_future_complete(self, future)
+        self.get_logger().info('map loaded')
         # Setup Nav2 Library
         self.navigator = BasicNavigator()
         initial_pose = PoseStamped()
@@ -86,9 +88,24 @@ class ControllerNode(Node):
 
         # I beleive we use this because we're starting nav2 in our main launch file...
         # we shall see
-        self.navigator.waitUntilNav2Active()
-        # The other option would be:
-        # navigator.lifecycleStartup()
+        self.get_logger().info("Waiting for nav2")
+        self.navigator.lifecycleStartup()
+        self.get_logger().info("Done")
+        
+        time.sleep(5.0)
+
+        # Debug, go to a predefined spot and back
+        self.goto([4.0,1.0])
+        time.sleep(5.0)
+        while not self.navigator.isNavComplete():
+            feedback = self.navigator.getFeedback()
+            
+            
+        self.goto([1.0,0.0])
+        time.sleep(5.0)
+        while not self.navigator.isNavComplete():
+            feedback = self.navigator.getFeedback()
+            
 
 
 
@@ -99,6 +116,7 @@ def main(args=None):
         controller_node = ControllerNode()
         rclpy.spin(controller_node)
     finally:
+        # controller_node.navigator.lifecycleShutdown()
         controller_node.destroy_node()
         rclpy.shutdown()
 
